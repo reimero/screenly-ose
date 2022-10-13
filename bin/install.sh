@@ -56,7 +56,7 @@ EOF
   # Reset color
   tput sgr 0
 
-  if [ "$USER" != 'pi' ]; then
+  if [ "$USER" != 'foyer_pi' ]; then
       echo "Screenly OSE must be installed as the user 'pi' (with sudo permission)."
       exit 1
   fi
@@ -101,7 +101,7 @@ elif [ "$WEB_UPGRADE" = true ]; then
   if [ -z "${BRANCH}" ]; then
     if [ "$BRANCH_VERSION" = "latest" ]; then
       export DOCKER_TAG="latest"
-      BRANCH="master"
+      BRANCH="master"foyer_pi
     elif [ "$BRANCH_VERSION" = "production" ]; then
       export DOCKER_TAG="production"
       BRANCH="production"
@@ -132,10 +132,10 @@ fi
 if [ -z "${REPOSITORY}" ]; then
   if [ "$WEB_UPGRADE" = false ]; then
     set -x
-    REPOSITORY=${1:-https://github.com/screenly/screenly-ose.git}
+    REPOSITORY=${1:-https://github.com/reimero/screenly-ose.git}
   else
     set -e
-    REPOSITORY=https://github.com/screenly/screenly-ose.git
+    REPOSITORY=https://github.com/reimero/screenly-ose.git
   fi
 fi
 
@@ -179,12 +179,12 @@ sudo pip install "$ANSIBLE_VERSION"
 sudo -u foyer_pi ansible localhost \
     -m git \
     -a "repo=$REPOSITORY dest=/home/foyer_pi/screenly version=$BRANCH force=no"
-cd /home/pi/screenly/ansible
+cd /home/foyer_pi/screenly/ansible
 
 sudo -E ansible-playbook site.yml "${EXTRA_ARGS[@]}"
 
 # Pull down and install containers
-/home/pi/screenly/bin/upgrade_containers.sh
+/home/foyer_pi/screenly/bin/upgrade_containers.sh
 
 sudo apt-get autoclean
 sudo apt-get clean
@@ -226,12 +226,12 @@ sudo find /usr/share/locale \
     ! -name 'locale.alias' \
     -exec rm -r {} \;
 
-sudo chown -R foyer_pi:foyer_pi /home/pi
+sudo chown -R foyer_pi:foyer_pi /home/foyer_pi
 
 # Run sudo w/out password
-if [ ! -f /etc/sudoers.d/010_pi-nopasswd ]; then
-  echo "foyer_pi ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/010_pi-nopasswd > /dev/null
-  sudo chmod 0440 /etc/sudoers.d/010_pi-nopasswd
+if [ ! -f /etc/sudoers.d/010_foyer_pi-nopasswd ]; then
+  echo "foyer_foyer_pi ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/010_foyer_pi-nopasswd > /dev/null
+  sudo chmod 0440 /etc/sudoers.d/010_foyer_pi-nopasswd
 fi
 
 # Ask user to set a new pi password if default password "raspberry" detected
