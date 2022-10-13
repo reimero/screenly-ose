@@ -169,16 +169,16 @@ fi
 
 # Install Ansible from requirements file.
 if [ "$BRANCH" = "master" ]; then
-    ANSIBLE_VERSION=$(curl -s https://raw.githubusercontent.com/Screenly/screenly-ose/$BRANCH/requirements/requirements.host.txt | grep ansible)
+    ANSIBLE_VERSION=$(curl -s https://raw.githubusercontent.com/reimero/screenly-ose/master/requirements/requirements.host.txt | grep ansible)
 else
     ANSIBLE_VERSION=ansible==2.8.8
 fi
 
 sudo pip install "$ANSIBLE_VERSION"
 
-sudo -u pi ansible localhost \
+sudo -u foyer_pi ansible localhost \
     -m git \
-    -a "repo=$REPOSITORY dest=/home/pi/screenly version=$BRANCH force=no"
+    -a "repo=$REPOSITORY dest=/home/foyer_pi/screenly version=$BRANCH force=no"
 cd /home/pi/screenly/ansible
 
 sudo -E ansible-playbook site.yml "${EXTRA_ARGS[@]}"
@@ -226,11 +226,11 @@ sudo find /usr/share/locale \
     ! -name 'locale.alias' \
     -exec rm -r {} \;
 
-sudo chown -R pi:pi /home/pi
+sudo chown -R foyer_pi:foyer_pi /home/pi
 
 # Run sudo w/out password
 if [ ! -f /etc/sudoers.d/010_pi-nopasswd ]; then
-  echo "pi ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/010_pi-nopasswd > /dev/null
+  echo "foyer_pi ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/010_pi-nopasswd > /dev/null
   sudo chmod 0440 /etc/sudoers.d/010_pi-nopasswd
 fi
 
@@ -243,8 +243,8 @@ check_defaultpw () {
         local VAR_CURRENTPISALT
         local VAR_CURRENTPIUSERPW
         local VAR_DEFAULTPIPW
-        VAR_CURRENTPISALT=$(sudo cat /etc/shadow | grep pi | awk -F '$' '{print $3}')
-        VAR_CURRENTPIUSERPW=$(sudo cat /etc/shadow | grep pi | awk -F ':' '{print $2}')
+        VAR_CURRENTPISALT=$(sudo cat /etc/shadow | grep foyer_pi | awk -F '$' '{print $3}')
+        VAR_CURRENTPIUSERPW=$(sudo cat /etc/shadow | grep foyer_pi | awk -F ':' '{print $2}')
         VAR_DEFAULTPIPW=$(mkpasswd -m sha-512 raspberry "$VAR_CURRENTPISALT")
 
         if [[ "$VAR_CURRENTPIUSERPW" == "$VAR_DEFAULTPIPW" ]]; then

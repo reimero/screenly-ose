@@ -8,7 +8,7 @@ import json
 
 from flask import request, Response
 
-LINUX_USER = os.getenv('USER', 'pi')
+LINUX_USER = os.getenv('USER', 'foyer_pi')
 WOTT_CREDENTIALS_PATH = '/opt/wott/credentials'
 WOTT_USER_CREDENTIALS_PATH = os.path.join(WOTT_CREDENTIALS_PATH, LINUX_USER)
 WOTT_SCREENLY_CREDENTIAL_NAME = 'screenly'
